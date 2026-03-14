@@ -26,7 +26,6 @@ export const useAccount = () => {
     },
     onSuccess: () => {
       toast.success('Register successfull - you can now login');
-      navigate('/login');
     },
   });
 
@@ -45,6 +44,32 @@ export const useAccount = () => {
     },
   });
 
+  const verifyEmail = useMutation({
+    mutationFn: async ({ userId, code }: { userId: string; code: string }) => {
+      await agent.get(`/confirmEmail?userId=${userId}&code=${code}`);
+    },
+  });
+
+  const resendConfirmationEmail = useMutation({
+    mutationFn: async ({
+      email,
+      userId,
+    }: {
+      email?: string;
+      userId?: string | null;
+    }) => {
+      await agent.get(`/account/resendConfirmEmail`, {
+        params: {
+          email,
+          userId,
+        },
+      });
+    },
+    onSuccess: () => {
+      toast.success('Email sent - please check your email');
+    },
+  });
+
   const { data: currentUser, isLoading: loadingUserInfo } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
@@ -60,5 +85,7 @@ export const useAccount = () => {
     logoutUser,
     loadingUserInfo,
     registerUser,
+    verifyEmail,
+    resendConfirmationEmail,
   };
 };
