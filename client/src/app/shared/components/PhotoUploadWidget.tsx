@@ -94,7 +94,7 @@ export default function PhotoUploadWidget({ uploadPhoto, loading }: Props) {
               onClick={onCrop}
               variant='contained'
               color='secondary'
-              disabled={loading}
+              loading={loading}
             >
               Upload
             </Button>
